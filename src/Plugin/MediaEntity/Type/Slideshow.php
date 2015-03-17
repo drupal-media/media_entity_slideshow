@@ -121,7 +121,7 @@ class Slideshow extends MediaTypeBase {
       return $this->config->get('icon_base') . '/slideshow.png';
     }
 
-    $thumbnail = $bundle->getType()->thumbnail($media);
+    $thumbnail = $bundle->getType()->thumbnail($slideshow_item);
     if (!$thumbnail) {
       return $this->config->get('icon_base') . '/slideshow.png';
     }
