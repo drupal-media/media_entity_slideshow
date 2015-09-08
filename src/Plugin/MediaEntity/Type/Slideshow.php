@@ -69,7 +69,7 @@ class Slideshow extends MediaTypeBase {
     $form['source_field'] = array(
       '#type' => 'select',
       '#title' => t('Field with source information'),
-      '#description' => t('Field on media entity that stores slideshow items.'),
+      '#description' => t('Field on media entity that stores slideshow items. You can create a bundle without selecting a value for this dropdown initially. This dropdown can be populated after adding fields to the bundle.'),
       '#default_value' => empty($this->configuration['source_field']) ? NULL : $this->configuration['source_field'],
       '#options' => $options,
     );
