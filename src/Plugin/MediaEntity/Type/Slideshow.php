@@ -10,7 +10,7 @@ namespace Drupal\media_entity_slideshow\Plugin\MediaEntity\Type;
 use Drupal\media_entity\MediaBundleInterface;
 use Drupal\media_entity\MediaInterface;
 use Drupal\media_entity\MediaTypeBase;
-use Drupal\media_entity\MediaTypeException;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Provides media type plugin for Slideshows.
@@ -51,11 +51,11 @@ class Slideshow extends MediaTypeBase {
   /**
    * {@inheritdoc}
    */
-  public function settingsForm(MediaBundleInterface $bundle) {
-    $form = array();
-
-    $options = array();
-    $allowed_field_types = array('entity_reference');
+  public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
+    /** @var MediaBundleInterface $bundle */
+    $bundle = $form_state->getFormObject()->getEntity();
+    $options = [];
+    $allowed_field_types = ['entity_reference'];
     /** @var \Drupal\Core\Field\FieldDefinitionInterface $field */
     foreach ($this->entityManager->getFieldDefinitions('media', $bundle->id()) as $field_name => $field) {
       if (in_array($field->getType(), $allowed_field_types)) {
@@ -66,13 +66,13 @@ class Slideshow extends MediaTypeBase {
       }
     }
 
-    $form['source_field'] = array(
+    $form['source_field'] = [
       '#type' => 'select',
       '#title' => t('Field with source information'),
       '#description' => t('Field on media entity that stores slideshow items. You can create a bundle without selecting a value for this dropdown initially. This dropdown can be populated after adding fields to the bundle.'),
       '#default_value' => empty($this->configuration['source_field']) ? NULL : $this->configuration['source_field'],
       '#options' => $options,
-    );
+    ];
 
     return $form;
   }
