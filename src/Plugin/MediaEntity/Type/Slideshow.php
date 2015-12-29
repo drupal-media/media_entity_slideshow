@@ -11,6 +11,7 @@ use Drupal\media_entity\MediaBundleInterface;
 use Drupal\media_entity\MediaInterface;
 use Drupal\media_entity\MediaTypeBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\media_entity\MediaTypeException;
 
 /**
  * Provides media type plugin for Slideshows.
@@ -80,27 +81,12 @@ class Slideshow extends MediaTypeBase {
   /**
    * {@inheritdoc}
    */
-  public function validate(MediaInterface $media) {
-    $source_field = $this->configuration['source_field'];
-    $field_definitions = $this->entityFieldManager->getFieldDefinitions('media', $media->bundle());
-    /** @var \Drupal\Core\Field\FieldDefinitionInterface $source_field_definition */
-    $source_field_definition = $field_definitions[$source_field];
+  public function attachConstraints(MediaInterface $media) {
+    parent::attachConstraints($media);
 
+    $source_field_name = $this->configuration['source_field'];
     // Validate slideshow items count.
-    if ($media->{$source_field}->isEmpty()) {
-      throw new MediaTypeException($this->configuration['source_field'], 'At least one slideshow item must exist.');
-    }
-
-    // Validate slideshow items bundles.
-    $handler_settings = $source_field_definition->getSetting('handler_settings');
-    if (!empty($handler_settings['target_bundles'])) {
-      /** @var \Drupal\Core\Entity\EntityInterface $entity */
-      foreach ($media->{$source_field}->referencedEntities() as $entity) {
-        if (!in_array($entity->bundle(), $handler_settings['target_bundles'])) {
-          throw new MediaTypeException($this->configuration['source_field'], 'Slideshow item of incorrect media bundle detected.');
-        }
-      }
-    }
+    $media->getTypedData()->getDataDefinition()->addConstraint('ItemsCount', array('source_field_name' => $source_field_name));
   }
 
   /**
