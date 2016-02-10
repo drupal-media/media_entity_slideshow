@@ -92,24 +92,31 @@ class Slideshow extends MediaTypeBase {
   /**
    * {@inheritdoc}
    */
+  public function getDefaultThumbnail() {
+    return $this->config->get('icon_base') . '/slideshow.png';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function thumbnail(MediaInterface $media) {
     $source_field = $this->configuration['source_field'];
 
     /** @var \Drupal\media_entity\MediaInterface $slideshow_item */
     $slideshow_item = $this->entityTypeManager->getStorage('media')->load($media->{$source_field}->target_id);
     if (!$slideshow_item) {
-      return $this->config->get('icon_base') . '/slideshow.png';
+      return $this->getDefaultThumbnail();
     }
 
     /** @var \Drupal\media_entity\MediaBundleInterface $bundle */
     $bundle = $this->entityTypeManager->getStorage('media_bundle')->load($slideshow_item->bundle());
     if (!$bundle) {
-      return $this->config->get('icon_base') . '/slideshow.png';
+      return $this->getDefaultThumbnail();
     }
 
     $thumbnail = $bundle->getType()->thumbnail($slideshow_item);
     if (!$thumbnail) {
-      return $this->config->get('icon_base') . '/slideshow.png';
+      return $this->getDefaultThumbnail();
     }
 
     return $thumbnail;
