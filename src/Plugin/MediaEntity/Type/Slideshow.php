@@ -121,4 +121,21 @@ class Slideshow extends MediaTypeBase {
 
     return $thumbnail;
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDefaultName(MediaInterface $media) {
+    // The default name will be the timestamp + number of slides.
+    $length = $this->getField($media, 'length');
+    if (!empty($length)) {
+      return $this->formatPlural($length,
+        '1 slide, created on @date',
+        '@count slides, created on @date',
+        ['@date' => \Drupal::service('date.formatter')->format($media->getCreatedTime(), 'custom', 'd/M/Y - H:i:s')]);
+    }
+
+    return parent::getDefaultName($media);
+  }
+
 }
