@@ -1,17 +1,10 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\media_entity_slideshow\Plugin\MediaEntity\Type\Slideshow.
- */
-
 namespace Drupal\media_entity_slideshow\Plugin\MediaEntity\Type;
 
-use Drupal\media_entity\MediaBundleInterface;
 use Drupal\media_entity\MediaInterface;
 use Drupal\media_entity\MediaTypeBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\media_entity\MediaTypeException;
 
 /**
  * Provides media type plugin for Slideshows.
