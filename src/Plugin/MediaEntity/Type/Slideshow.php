@@ -79,7 +79,7 @@ class Slideshow extends MediaTypeBase {
 
     $source_field_name = $this->configuration['source_field'];
     // Validate slideshow items count.
-    $media->getTypedData()->getDataDefinition()->addConstraint('ItemsCount', array('source_field_name' => $source_field_name));
+    $media->getTypedData()->getDataDefinition()->addConstraint('ItemsCount', array('sourceFieldName' => $source_field_name));
   }
 
   /**
