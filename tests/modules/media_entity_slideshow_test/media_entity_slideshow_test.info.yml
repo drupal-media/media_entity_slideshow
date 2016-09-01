@@ -1,0 +1,11 @@
+name: 'Media entity slideshow test'
+type: module
+description: 'Provides test bundle for media entity slideshow.'
+core: 8.x
+package: Testing
+
+dependencies:
+  - media_entity_slideshow
+  - media_entity_image
+  - file
+  - image
