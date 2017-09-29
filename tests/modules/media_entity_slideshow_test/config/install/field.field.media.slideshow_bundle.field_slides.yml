@@ -3,8 +3,8 @@ status: true
 dependencies:
   config:
     - field.storage.media.field_slides
-    - media_entity.bundle.image_bundle
-    - media_entity.bundle.slideshow_bundle
+    - media.type.image_bundle
+    - media.type.slideshow_bundle
 id: media.slideshow_bundle.field_slides
 field_name: field_slides
 entity_type: media

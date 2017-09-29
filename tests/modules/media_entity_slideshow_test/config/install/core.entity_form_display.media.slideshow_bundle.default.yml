@@ -3,7 +3,7 @@ status: true
 dependencies:
   config:
     - field.field.media.slideshow_bundle.field_slides
-    - media_entity.bundle.slideshow_bundle
+    - media.type.slideshow_bundle
 id: media.slideshow_bundle.default
 targetEntityType: media
 bundle: slideshow_bundle

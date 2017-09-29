@@ -6,9 +6,9 @@ dependencies:
 id: slideshow_bundle
 label: 'Slideshow bundle'
 description: ''
-type: slideshow
+source: slideshow
 queue_thumbnail_downloads: false
 new_revision: false
-type_configuration:
+source_configuration:
   source_field: field_slides
 field_map: {  }

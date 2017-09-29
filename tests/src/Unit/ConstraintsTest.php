@@ -9,7 +9,7 @@ use Drupal\Tests\UnitTestCase;
 /**
  * Tests media_entity_slideshow constraints.
  *
- * @group media_entity
+ * @group media_entity_slideshow
  */
 class ConstraintsTest extends UnitTestCase {
 
@@ -65,7 +65,7 @@ class TestMediaEntityConstraints {
    *
    * @var array
    */
-  protected $sourceFields = array();
+  protected $sourceFields = [];
 
   /**
    * TestMediaEntityConstraints constructor.

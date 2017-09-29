@@ -5,7 +5,7 @@ core: 8.x
 package: Testing
 
 dependencies:
-  - media_entity_slideshow
-  - media_entity_image
-  - file
-  - image
+  - media_entity_slideshow:media_entity_slideshow
+  - drupal:media (>= 8.4)
+  - drupal:file
+  - drupal:image

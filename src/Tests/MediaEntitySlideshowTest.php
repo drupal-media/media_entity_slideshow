@@ -4,9 +4,7 @@ namespace Drupal\media_entity_slideshow\Tests;
 
 use Drupal\Core\Language\Language;
 use Drupal\file\Entity\File;
-use Drupal\file\FileInterface;
-use Drupal\media_entity\Entity\Media;
-use Drupal\media_entity\MediaInterface;
+use Drupal\media\Entity\Media;
 use Drupal\simpletest\WebTestBase;
 
 /**
@@ -29,21 +27,21 @@ class MediaEntitySlideshowTest extends WebTestBase {
   /**
    * The slideshow media bundle.
    *
-   * @var \Drupal\media_entity\MediaBundleInterface
+   * @var \Drupal\media\MediaTypeInterface
    */
   protected $slideshowMediaBundle;
 
   /**
    * The image media bundle.
    *
-   * @var \Drupal\media_entity\MediaBundleInterface
+   * @var \Drupal\media\MediaTypeInterface
    */
   protected $imageMediaBundle;
 
   /**
    * A collection of media entities, to be used in our test.
    *
-   * @var \Drupal\media_entity\MediaInterface[]
+   * @var \Drupal\media\MediaInterface[]
    */
   protected $mediaImageCollection;
 
@@ -52,7 +50,7 @@ class MediaEntitySlideshowTest extends WebTestBase {
    */
   public function setUp() {
     parent::setUp();
-    $bundle_storage = $this->container->get('entity_type.manager')->getStorage('media_bundle');
+    $bundle_storage = $this->container->get('entity_type.manager')->getStorage('media_type');
     $this->slideshowMediaBundle = $bundle_storage->load('slideshow_bundle');
     $this->imageMediaBundle = $bundle_storage->load('image_bundle');
     $adminUser = $this->drupalCreateUser([
@@ -62,7 +60,6 @@ class MediaEntitySlideshowTest extends WebTestBase {
       'update any media',
       'delete media',
       'delete any media',
-      'access media overview',
     ]);
     $this->drupalLogin($adminUser);
 
@@ -83,7 +80,7 @@ class MediaEntitySlideshowTest extends WebTestBase {
       'name[0][value]' => 'My first slideshow',
       'field_slides[0][target_id]' => $this->mediaImageCollection[0]->label() . ' (' . $this->mediaImageCollection[0]->id() . ')',
     ];
-    $this->drupalPostForm(NULL, $edit, t('Save and publish'));
+    $this->drupalPostForm(NULL, $edit, t('Save'));
     $this->assertText('Slideshow bundle My first slideshow has been created', 'Slideshow media entity was correctly created.');
     $slideshow_id = $this->container->get('entity.query')
       ->get('media')
@@ -98,7 +95,7 @@ class MediaEntitySlideshowTest extends WebTestBase {
       'field_slides[0][target_id]' => $this->mediaImageCollection[0]->label() . ' (' . $this->mediaImageCollection[0]->id() . ')',
       'field_slides[1][target_id]' => $this->mediaImageCollection[1]->label() . ' (' . $this->mediaImageCollection[1]->id() . ')',
     ];
-    $this->drupalPostForm(NULL, $edit, t('Save and keep published'));
+    $this->drupalPostForm(NULL, $edit, t('Save'));
     $this->assertResponse(200, 'Form submitted correctly');
     $slideshow = $this->loadMedia($slideshow->id());
     $this->assertEqual($slideshow->field_slides->count(), 2, 'A new slide was correctly added to the slideshow.');
@@ -109,7 +106,7 @@ class MediaEntitySlideshowTest extends WebTestBase {
       'field_slides[0][target_id]' => $this->mediaImageCollection[0]->label() . ' (' . $this->mediaImageCollection[0]->id() . ')',
       'field_slides[1][target_id]' => '',
     ];
-    $this->drupalPostForm(NULL, $edit, t('Save and keep published'));
+    $this->drupalPostForm(NULL, $edit, t('Save'));
     $this->assertResponse(200, 'Form submitted correctly');
     $slideshow = $this->loadMedia($slideshow->id());
     $this->assertEqual($slideshow->field_slides->count(), 1, 'The deletion of one slide worked properly.');
@@ -127,7 +124,7 @@ class MediaEntitySlideshowTest extends WebTestBase {
    * @param int $count
    *   (optional) The number of items to create. Defaults to 3.
    *
-   * @return MediaInterface[]
+   * @return \Drupal\media\MediaInterface[]
    *   An indexed array of fully-loaded media objects of bundle image.
    */
   private function createMediaImageCollection($count = 3) {
@@ -138,7 +135,7 @@ class MediaEntitySlideshowTest extends WebTestBase {
         'name' => 'Image media ' . $i,
         'uid' => '1',
         'langcode' => Language::LANGCODE_DEFAULT,
-        'status' => Media::PUBLISHED,
+        'status' => TRUE,
       ]);
       $image = $this->getTestFile('image');
       $media->field_imagefield->target_id = $image->id();
@@ -154,11 +151,11 @@ class MediaEntitySlideshowTest extends WebTestBase {
    * @param int $id
    *   The media identifier.
    *
-   * @return \Drupal\media_entity\MediaInterface
+   * @return \Drupal\Core\Entity\EntityInterface
    *   The loaded media entity.
    */
   protected function loadMedia($id) {
-    /** @var \Drupal\media_entity\MediaStorage $storage */
+    /** @var \Drupal\Core\Entity\ContentEntityStorageInterface $storage */
     $storage = $this->container->get('entity_type.manager')->getStorage('media');
     return $storage->loadUnchanged($id);
   }
@@ -172,7 +169,7 @@ class MediaEntitySlideshowTest extends WebTestBase {
   protected function getTestFile($type_name, $size = NULL) {
     $file = current($this->drupalGetTestFiles($type_name, $size));
     $file->filesize = filesize($file->uri);
-    /** @var FileInterface $file */
+    /** @var \Drupal\file\FileInterface $file */
     $file = File::create((array) $file);
     $file->setPermanent();
     $file->save();

@@ -4,7 +4,7 @@ dependencies:
   config:
     - field.field.media.slideshow_bundle.field_slides
     - image.style.thumbnail
-    - media_entity.bundle.slideshow_bundle
+    - media.type.slideshow_bundle
   module:
     - image
     - user

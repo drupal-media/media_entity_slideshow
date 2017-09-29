@@ -4,7 +4,7 @@ dependencies:
   config:
     - field.field.media.image_bundle.field_imagefield
     - image.style.thumbnail
-    - media_entity.bundle.image_bundle
+    - media.type.image_bundle
   module:
     - image
     - user
